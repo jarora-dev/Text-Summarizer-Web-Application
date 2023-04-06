@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Summarization</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        textarea { width: 100%; height: 200px; }
+        button { background-color: #4CAF50; color: white; padding: 14px 20px; border: none; cursor: pointer; }
+        button:hover { opacity: 0.8; }
+    </style>
+</head>
+<body>
+    <h1>Text Summarization</h1>
+    <p>Paste your text below and click "Summarize" to get the summary:</p>
+    <textarea id="inputText" placeholder="Enter your text here..."></textarea>
+    <br><br>
+    <button onclick="summarizeText()">Summarize</button>
+    <h2>Summary:</h2>
+    <textarea rows="2"  id="summary" readonly></textarea>
+
+    <script>
+        function summarizeText() {
+            const apiUrl = "http://localhost:5000/summarize";
+            const inputText = document.getElementById("inputText").value;
+            const summaryElement = document.getElementById("summary");
+
+            fetch(apiUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: inputText }),
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                summaryElement.value = data.summary;
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+                alert("An error occurred. Please try again.");
+            });
+        }
+    </script>
+</body>
+</html>
