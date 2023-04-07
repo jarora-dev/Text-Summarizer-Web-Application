@@ -1,0 +1,9 @@
+name: project_environment
+channels:
+  - defaults
+dependencies:
+  - python=3.10.9
+  - pip:
+    - flask
+    - transformers
+    - flask-cors

@@ -1,20 +1,20 @@
-from flask import Flask, request, jsonify
-from flask import render_template
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
-from transformers import T5ForConditionalGeneration, T5Tokenizer
+import requests
+import json
 
 app = Flask(__name__)
 CORS(app)
 
-# Load the saved model and tokenizer
-model_path = "./models/checkpoint-11250"
-tokenizer = T5Tokenizer.from_pretrained(model_path)
-model = T5ForConditionalGeneration.from_pretrained(model_path)
+# Replace <your_azure_endpoint> with your actual Azure endpoint
+azure_endpoint = "https://text-summarizer.eastus2.inference.ml.azure.com/score"
+# Replace <your_azure_key> with your actual Azure key
+azure_key = "test"
 
-max_input_length = 256
-max_target_length = 50
-
-# Define the root route to render the index.html file
+headers = {
+    "Content-Type": "application/json",
+    "Authorization": f"Bearer {azure_key}",
+}
 
 
 @app.route("/")
@@ -22,21 +22,14 @@ def index():
     return render_template("index.html")
 
 
-# Define the API route for summarization
-
-
 @app.route("/summarize", methods=["POST"])
 def summarize():
     text = request.json["text"]
-    inputs = tokenizer.encode(
-        "summarize: " + text, return_tensors="pt", max_length=256, truncation=True)
-
-    # Generate summary
-    summary_ids = model.generate(
-        inputs, num_beams=4, max_length=50, early_stopping=True)
-    summary = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
-
-    return jsonify({"summary": summary})
+    data = {"text": text}
+    response = requests.post(
+        azure_endpoint, headers=headers, data=json.dumps(data))
+    summary = response.json()
+    return jsonify(summary)
 
 
 if __name__ == "__main__":
