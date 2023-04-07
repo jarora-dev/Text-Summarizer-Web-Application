@@ -1,5 +1,2 @@
 Flask==2.2.3
 Flask-Cors==3.0.10
-transformers==4.27.4
-sentencepiece==0.1.97
-torch==2.0.0
