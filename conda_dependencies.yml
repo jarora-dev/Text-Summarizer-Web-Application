@@ -1,9 +1,12 @@
 name: project_environment
 channels:
-  - defaults
+- conda-forge
+- pytorch
 dependencies:
-  - python=3.10.9
-  - pip:
-    - flask
-    - transformers
-    - flask-cors
+- python=3.10.9
+- pip
+- pip:
+  - azureml-defaults
+  - torch>=1.9.0
+  - transformers>=4.27.4
+  - sentencepiece>=0.1.97

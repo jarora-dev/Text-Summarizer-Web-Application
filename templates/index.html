@@ -34,7 +34,8 @@
             })
             .then((response) => response.json())
             .then((data) => {
-                summaryElement.value = data.summary;
+                console.log(data);
+                summaryElement.value = data[0]["summary_text"];
             })
             .catch((error) => {
                 console.error("Error:", error);
