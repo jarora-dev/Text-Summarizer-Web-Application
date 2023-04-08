@@ -4,7 +4,6 @@ import requests
 import json
 
 app = Flask(__name__)
-CORS(app)
 
 API_URL = "https://api-inference.huggingface.co/models/facebook/bart-large-cnn"
 API_TOKEN = "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"
