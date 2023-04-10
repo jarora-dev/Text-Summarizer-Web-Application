@@ -10,19 +10,48 @@
         textarea { width: 100%; height: 200px; }
         button { background-color: #4CAF50; color: white; padding: 14px 20px; border: none; cursor: pointer; }
         button:hover { opacity: 0.8; }
+        .spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #4CAF50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
-    <h1>Text Summarization</h1>
+    <h1>News Article Summarization</h1>
+    <h3>Created by:</h3>
+    <h4>Jatin Arora</h4>
+    <h4>Rishabh Malhotra</h4>
+    <h4>Ritvij Sharma</h4>
     <p>Paste your text below and click "Summarize" to get the summary:</p>
     <textarea id="inputText" placeholder="Enter your text here..."></textarea>
     <br><br>
-    <button onclick="summarizeText()">Summarize</button>
+    <button id="summarizeButton" onclick="summarizeText()">Summarize</button>
+    <div id="spinner" class="spinner" style="display:none;"></div>
     <h2>Summary:</h2>
     <textarea rows="2"  id="summary" readonly></textarea>
 
     <script>
+        function showSpinner() {
+            document.getElementById("summarizeButton").style.display = "none";
+            document.getElementById("spinner").style.display = "inline-block";
+        }
+
+        function hideSpinner() {
+            document.getElementById("summarizeButton").style.display = "inline-block";
+            document.getElementById("spinner").style.display = "none";
+        }
+
         function summarizeText() {
+            showSpinner();
+
             const apiUrl = "http://localhost:5000/summarize";
             const inputText = document.getElementById("inputText").value;
             const summaryElement = document.getElementById("summary");
@@ -30,16 +59,18 @@
             fetch(apiUrl, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ text: inputText }),
+                body: JSON.stringify({ "text": inputText }),
             })
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
-                summaryElement.value = data[0]["summary_text"];
+                summaryElement.value = data["summary"];
+                hideSpinner();
             })
             .catch((error) => {
                 console.error("Error:", error);
                 alert("An error occurred. Please try again.");
+                hideSpinner();
             });
         }
     </script>

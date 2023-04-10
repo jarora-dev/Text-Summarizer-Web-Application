@@ -5,16 +5,8 @@ import json
 
 app = Flask(__name__)
 
-API_URL = "https://api-inference.huggingface.co/models/google/pegasus-cnn_dailymail"
-API_TOKEN = "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"
-
-headers = {"Authorization": f"Bearer {API_TOKEN}"}
-
-
-def query(payload):
-    response = requests.post(API_URL, headers=headers, json=payload)
-    print(response)
-    return response.json()
+API_URL = "http://20.96.47.248:5000/summarize"
+CORS(app, resources={r"*": {"origins": "*"}})
 
 
 @app.route("/")
@@ -26,11 +18,11 @@ def index():
 def summarize():
     text = request.json["text"]
     data = {"text": text}
+    print(data)
     response = requests.post(
-        API_URL, headers=headers, data=json.dumps(data["text"]))
+        API_URL, json=data)
     output = response.json()
-    print(output)
-    return jsonify(output)
+    return (output)
 
 
 if __name__ == "__main__":
