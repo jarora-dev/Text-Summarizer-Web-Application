@@ -52,7 +52,7 @@
         function summarizeText() {
             showSpinner();
 
-            const apiUrl = "http://localhost:5000/summarize";
+            const apiUrl = "{{ url_for('summarize')}}";
             const inputText = document.getElementById("inputText").value;
             const summaryElement = document.getElementById("summary");
 

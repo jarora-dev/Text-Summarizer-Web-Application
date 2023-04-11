@@ -6,7 +6,12 @@ import json
 app = Flask(__name__)
 
 API_URL = "http://20.186.163.226:5000/summarize"
-CORS(app, resources={r"*": {"origins": "*"}})
+cors_config = {
+    "origins": "*",
+    "methods": ["GET", "POST", "OPTIONS"],
+    "allow_headers": "*",
+}
+CORS(app, **cors_config)
 
 
 @app.route("/")

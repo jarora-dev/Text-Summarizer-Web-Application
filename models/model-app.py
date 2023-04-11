@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 import json
 import logging
@@ -10,7 +10,12 @@ logging.basicConfig(level=logging.INFO,
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-CORS(app, origins="*")
+cors_config = {
+    "origins": "*",
+    "methods": ["GET", "POST", "OPTIONS"],
+    "allow_headers": "*",
+}
+CORS(app, **cors_config)
 
 model_path = "./checkpoint-11250"
 tokenizer = T5Tokenizer.from_pretrained(model_path)
@@ -28,7 +33,9 @@ def summarize():
         inputs, num_beams=4, max_length=50, early_stopping=True
     )
     summary = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
-    return jsonify({"summary": summary})
+    response = make_response(jsonify({"summary": summary}))
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
 
 
 if __name__ == "__main__":
