@@ -5,7 +5,7 @@ import json
 
 app = Flask(__name__)
 
-API_URL = "http://20.96.47.248:5000/summarize"
+API_URL = "http://20.186.163.226:5000/summarize"
 CORS(app, resources={r"*": {"origins": "*"}})
 
 

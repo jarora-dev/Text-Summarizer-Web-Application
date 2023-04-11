@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.INFO,
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-CORS(app, resources={r"*": {"origins": "*"}})
+CORS(app, origins="*")
 
 model_path = "./checkpoint-11250"
 tokenizer = T5Tokenizer.from_pretrained(model_path)
